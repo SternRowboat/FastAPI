@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11-slim as base
 
 # required for psycopg2
 RUN apt update \
@@ -19,3 +19,7 @@ COPY pyproject.toml .
 RUN poetry install
 
 COPY . .
+
+FROM base AS test
+RUN pip install pytest
+CMD ["pytest"]

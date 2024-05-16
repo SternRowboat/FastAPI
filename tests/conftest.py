@@ -1,13 +1,17 @@
 # import asyncio
 # from typing import Any, Generator, AsyncGenerator
-#
-# import pytest
 # import pytest_asyncio
-# from async_asgi_testclient import TestClient
-#
-# from src.main import app
 
-#
+import pytest
+from fastapi.testclient import TestClient
+from app.main import app
+
+@pytest.fixture(scope="module")
+def test_app():
+    client = TestClient(app)
+    yield client  # this is where the testing happens
+
+
 # @pytest.fixture(autouse=True, scope="session")
 # def run_migrations() -> None:
 #     import os

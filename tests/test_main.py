@@ -1,15 +1,10 @@
 from fastapi.testclient import TestClient
-import pytest
 from fastapi import status
 
-from app.main import app
 
-client = TestClient(app)
-
-def test_register(client: TestClient) -> None:
-    response = client.get("/")
-    # resp = await client.get("/")
+def test_main(test_app: TestClient) -> None:
+    response = test_app.get("/")
+    # resp = await client.get("/")#
 
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {"msg": "Hello World"}
- 

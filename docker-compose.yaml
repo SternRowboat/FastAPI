@@ -4,7 +4,7 @@ services:
   api:
     container_name: api
     build:
-      context: robert-watson-python-api-challenge
+      context: .
       dockerfile: Dockerfile
       args:
         - ENVIRONMENT=dev
@@ -32,3 +32,10 @@ services:
       interval: 1s
       timeout: 5s
       retries: 15
+
+  tests:
+    build:
+      context: .
+      target: test
+    volumes:
+      - .:/code
