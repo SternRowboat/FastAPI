@@ -1,0 +1,61 @@
+[tool.poetry]
+name = "assignment-api"
+version = "0.1.0"
+description = ""
+authors = ["olliefinn <ollie.finn@funnelfuel.io>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.110.3"
+uvicorn = "^0.29.0"
+psycopg2-binary = "^2.9.9"
+sqlalchemy = "^2.0.29"
+alembic = "^1.13.1"
+ruff = "^0.4.2"
+pytest = "^8.2.0"
+httpx = "^0.27.0"
+
+[tool.ruff]
+fix = true
+unsafe-fixes = true
+line-length = 120
+target-version = "py311"
+extend-exclude = ["bin"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D1", # allow missing docstrings
+    "FBT", # allow boolean args
+    "ANN101", # missing-type-self
+    "ANN102", # missing-type-cls
+    "INP", # ignore flake8-no-pep420
+    "B008", # function-call-in-default-argument
+    "ANN204", # no typings for __init__
+    "RUF001", # allow cyrillic letters
+    "D203", # "one-blank-line-before-class" conflicting with D211
+    "D213", # "multi-line-summary-second-line" conflicting with D212
+    "COM812", # flake8-commas "Trailing comma missing"
+    "ISC001", # flake8-implicit-str-concat
+    "ERA001", # commented out code
+]
+isort.lines-after-imports = 2
+isort.no-lines-before = ["standard-library", "local-folder"]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/*.py" = [
+    "S101", # allow asserts
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests"
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
