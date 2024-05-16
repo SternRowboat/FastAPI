@@ -18,4 +18,4 @@ COPY pyproject.toml .
 
 RUN poetry install
 
-COPY robert-watson-python-api-challenge .
+COPY . .

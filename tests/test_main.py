@@ -2,12 +2,11 @@ from fastapi.testclient import TestClient
 import pytest
 from fastapi import status
 
-from ..app.main import app
+from app.main import app
 
 client = TestClient(app)
 
-@pytest.mark.asyncio
-async def test_register(client: TestClient) -> None:
+def test_register(client: TestClient) -> None:
     response = client.get("/")
     # resp = await client.get("/")
 
