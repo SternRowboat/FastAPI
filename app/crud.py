@@ -35,3 +35,17 @@ def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int) -> mod
     db.commit()
     db.refresh(db_item)
     return db_item
+
+
+def get_user_items(db: Session, user_id: int) -> models.Item:
+    pass
+
+
+# TODO if all these funcs are going to use a db session
+#  then I can wrap them with a decorator
+def delete_user(db: Session, user_id: int) -> models.User:
+    pass
+
+
+def update_user(db: Session, user_id: int) -> models.User:
+    pass

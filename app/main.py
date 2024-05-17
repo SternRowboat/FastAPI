@@ -24,17 +24,27 @@ async def read_main():
 
 
 @app.get("/users/", response_model=list[schemas.User])
-def read_all_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> list[type[models.User]]:
+def read_all_users(
+        skip: int = 0,
+        limit: int = 100,
+        db: Session = Depends(get_db)) -> list[type[models.User]]:
+
     return crud.get_users(db, skip=skip, limit=limit)
 
 
 @app.get("/items/", response_model=list[schemas.Item])
-def read_all_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> list[type[models.Item]]:
+def read_all_items(
+        skip: int = 0,
+        limit: int = 100,
+        db: Session = Depends(get_db)) -> list[type[models.Item]]:
+
     return crud.get_items(db, skip=skip, limit=limit)
 
 
 @app.post("/users/", response_model=schemas.User)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)) -> models.User:
+def create_user(user: schemas.UserCreate,
+                db: Session = Depends(get_db)) -> models.User:
+
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -49,21 +59,21 @@ def read_user(user_id: int, db: Session = Depends(get_db)) -> models.User:
     return db_user
 
 
-@app.put("/users/{ID}", response_model=list[schemas.Item])
-def update_user(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> list[type[models.Item]]:
-    return crud.get_items(db, skip=skip, limit=limit)
+@app.put("/users/{ID}", response_model=schemas.User)
+def update_user(db: Session = Depends(get_db)) -> models.User:
+    return crud.update_user(db)
 
 
-@app.post("/users/{ID}/items", response_model=list[schemas.Item])
-def create_user_item(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> list[type[models.Item]]:
-    return crud.get_items(db, skip=skip, limit=limit)
+@app.post("/users/{ID}/items", response_model=models.Item)
+def create_user_item(db: Session = Depends(get_db)) -> models.Item:
+    return crud.create_user_item(db)
 
 
 @app.get("/users/{ID}/items", response_model=list[schemas.Item])
-def get_user_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> list[type[models.Item]]:
-    return crud.get_items(db, skip=skip, limit=limit)
+def get_user_items(db: Session = Depends(get_db)) -> list[type[models.Item]]:
+    return crud.get_user_items(db)
 
 
-@app.delete("/user/{ID}", response_model=list[schemas.Item])
-def delete_user(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> list[type[models.Item]]:
-    return crud.get_items(db, skip=skip, limit=limit)
+@app.delete("/user/{ID}", response_model=schemas.User)
+def delete_user(db: Session = Depends(get_db)) -> schemas.User:
+    return crud.delete_user(db)
