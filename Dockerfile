@@ -14,7 +14,7 @@ ENV POETRY_VIRTUALENVS_CREATE=false
 
 WORKDIR /code
 
-COPY pyproject.toml .
+COPY requirements/pyproject.toml .
 
 RUN poetry install
 

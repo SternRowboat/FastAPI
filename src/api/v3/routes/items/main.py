@@ -1,8 +1,25 @@
-from sqlalchemy.orm import Session
+@router.get("/")
+async def get_all_users(user: User =
+Depends(get_current_active_user),
+                        db: Session = Depends(get_db)):
+    """
+    # Get a list of all users
 
-from app import models, schemas
-from app.models import Item, User
+    **Access:**
+    - Admins get a list of all users.
+    - Users with lower rights get a list with only the enabled users.
+    """
+    if user.super_admin:
+        return get_users_admin(db=db)
+    else:
+        return get_users(db=db)
 
+
+router = APIRouter(
+    prefix="/items",
+    tags=["Items"],
+    responses={404: {"description": "Not found"}},
+)
 
 def get_user(db: Session, user_id: int) -> models.User:
     return db.query(models.User).filter(models.User.id == user_id).first()
@@ -23,15 +40,3 @@ def create_user(db: Session, user: schemas.UserCreate) -> models.User:
     db.commit()
     db.refresh(db_user)
     return db_user
-
-
-def get_items(db: Session, skip: int = 0, limit: int = 100) -> list[type[Item]]:
-    return db.query(models.Item).offset(skip).limit(limit).all()
-
-
-def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int) -> models.Item:
-    db_item = models.Item(**item.dict(), owner_id=user_id)
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
-    return db_item

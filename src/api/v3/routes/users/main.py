@@ -1,27 +1,8 @@
-from fastapi import Depends, FastAPI, HTTPException
-from sqlalchemy.orm import Session
-
-from app import models, schemas, crud
-from app.database import SessionLocal, engine
-
-models.Base.metadata.create_all(bind=engine)
-
-app = FastAPI()
-
-
-# Dependency
-def get_db() -> Session:
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-@app.get("/")
-async def read_main():
-    return {"msg": "Hello World"}
-
+router = APIRouter(
+    prefix="/users",
+    tags=["Users"],
+    responses={404: {"description": "Not found"}},
+)
 
 @app.post("/users/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)) -> models.User:
@@ -43,7 +24,3 @@ def read_user(user_id: int, db: Session = Depends(get_db)) -> models.User:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-
-@app.get("/items/", response_model=list[schemas.Item])
-def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> list[type[models.Item]]:
-    return crud.get_items(db, skip=skip, limit=limit)
