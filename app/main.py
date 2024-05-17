@@ -47,3 +47,8 @@ def read_user(user_id: int, db: Session = Depends(get_db)) -> models.User:
 @app.get("/items/", response_model=list[schemas.Item])
 def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> list[type[models.Item]]:
     return crud.get_items(db, skip=skip, limit=limit)
+
+
+@app.get("/items2/", response_model=list[schemas.Item])
+def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> list[type[models.Item]]:
+    return crud.get_items(db, skip=skip, limit=limit)
