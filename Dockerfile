@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11-slim as base
 
 # required for psycopg2
 RUN apt update \
@@ -14,8 +14,14 @@ ENV POETRY_VIRTUALENVS_CREATE=false
 
 WORKDIR /code
 
-COPY pyproject.toml .
+COPY requirements/pyproject.toml .
 
-RUN poetry install
+RUN poetry install --no-root
 
-COPY robert-watson-python-api-challenge .
+COPY . .
+
+RUN pip install -e .
+
+FROM base AS test
+RUN pip install pytest
+CMD ["pytest"]
